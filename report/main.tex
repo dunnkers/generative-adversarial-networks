@@ -1,14 +1,45 @@
 \documentclass{article}
+\usepackage[english]{babel}
+\usepackage{palatino,mathpazo}
 \usepackage[utf8]{inputenc}
+\setlength\parindent{0pt}
+\pagenumbering{gobble}
+\usepackage[margin=1.4in]{geometry}
 
-\title{generative-adversarial-networks}
-\author{jeroenoverschie }
-\date{February 2021}
+\usepackage[maxnames=20]{biblatex}
+\usepackage{csquotes}
+\addbibresource{bibliography.bib}
+\usepackage[nottoc,numbib]{tocbibind}
+
+% Lame title idea: Faking Van Gogh :')
+% pretty nice title 
+
+\title{Making Art with Generative Adversarial Networks}
+\author{Loran Knol (s3182541)\\Thijs Havinga (s2922924)\\Elisa Oostwal (s2468255)\\Jeroen Overschie (s2995697)}
+\date{\today}
 
 \begin{document}
 
 \maketitle
 
-\section{Introduction}
+\section*{Introduction}
+
+% About Generative Adversarial Networks
+Generative Adversarial Networks are a relatively new type of technique, in which two networks are simultaneously trained whilst competing against each other. One of the networks is a \textit{generative} network, which generates new 'candidates' from a lower-dimensional space, trying to represent the data distribution of interest. A candidate could, for example, be a picture of a person or some other entity. The other network, however, is of a \textit{discriminative} type, which tries to classify the candidates produced by the generative network as either real or fake. As such, the two networks play a zero-sum game: the generative network tries to ``fool'' the discriminative network, while the discriminative network tries to tell real from synthesized. The generative network is thus stimulated to create ever more convincing candidates, up to a level where it might be impossible to tell real from fake.\\
+
+% Short description of the project / project goal + Datasets / simulator used
+In this project, we aim to train such a Generative Adversarial Network ourselves, with the purpose of image generation specifically. As the generation of human faces has been widely studied, we have chosen for a different topic, namely, the generation of paintings. While large datasets of paintings are available (e.g., ~\cite{kaggle_rijksmuseum}), we have opted to restrict ourselves to one artist, as we believe this will give a better chance at producing realistic paintings. For this, we have chosen the Dutch artist Vincent van Gogh, who is known for his unique style. The dataset is taken from~\cite{kaggle_van_gogh} and consists of $2 \times 10^3$ images. The goal then becomes to generate paintings that resemble Van Gogh's in terms of color usage and style.\\
+\\
+While our idea may seem similar to programs which can copy the style of one picture to another, such as DeepDream~\cite{deepdream} and deepart.io~\cite{deepart}, there is an important difference: in the two aforementioned mentioned programs two input images, usually a painting and a photo, are combined to a new output image using a Convolutional Neural Network, whereas our program will use a Generative Adversarial Network to generate an output image solely based on a collection of images (paintings). The images that are produced will therefore not follow the structure of a specified input image. As such, we do not expect our results to match up to the ones produced by these programs.\\
+
+% Programming environment
+
+For training the network, Keras was chosen as it offers a wide variety of (pre-trained) models.
+
+% Auxiliary Classifier Generative Adversarial Network ?
+
+% Might be useful: https://github.com/eriklindernoren/Keras-GAN
+
+\printbibliography
 
 \end{document}
