@@ -22,7 +22,7 @@ Run `python pickle_gan.py`. This will create a `network.pkl` file under `pickles
 
 ## Configure training
 
-This file specifies a number of options for the function `training_loop()` (defined in `training/training_loop.py`). Interesting stuff to change:
+`train.py` specifies a number of options for the function `training_loop()` (defined in `training/training_loop.py`). Interesting stuff to change:
 
 * `resume_run_pkl`: This will load `network.pkl` and allows to continue training.
 * `resume_kimg` and `total_kimg`: These specify the image number the training loop is supposed to be at and how many images will have to be trained on in total, respectively. This has an influence on the learning rate and resolution schedule you will start training with.
