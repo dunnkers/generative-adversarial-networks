@@ -9,6 +9,6 @@
 #SBATCH --array=0
 # → do make sure /logs directory exists!
 
-module load TensorFlow
-pip install tensorflow-gan tensorflow-probability tensorflow-datasets absl-py matplotlib --user
+# runs on GPU. no CUDA modules loaded.
+pip install tensorflow tensorflow-gan tensorflow-probability tensorflow-datasets absl-py matplotlib --user
 python progressive_gan/train_main.py --alsologtostderr --train_log_dir /data/s2995697/progressive-gan/tflogs
