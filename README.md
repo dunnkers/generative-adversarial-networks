@@ -21,4 +21,4 @@ The dataset will now be available in `data_dir` 💪🏻.
 
 → in the case of Peregrine, it is recommended to set `data_dir` to somewhere in `/data/<s_number>/`.
 ## About
-By Loran Knol, Elisa Oostwal[Jeroen Overschie](https://dunnkers.com).
+By Loran Knol, Elisa Oostwal, Thijs Havinga and Jeroen Overschie.
