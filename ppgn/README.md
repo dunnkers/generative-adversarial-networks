@@ -1,19 +1,8 @@
 ## Plug and Play Generative Networks
 
-This repository contains source code necessary to reproduce some of the main results in the paper:
+This code is taken from [this](https://github.com/Evolving-AI-Lab/ppgn) repository.
 
-[Nguyen A](http://anhnguyen.me), [Clune J](http://jeffclune.com), [Bengio Y](http://www-labs.iro.umontreal.ca/~bengioy/yoshua_en/), [Dosovitskiy A](http://lmb.informatik.uni-freiburg.de/people/dosovits/), [Yosinski J](http://yosinski.com/). (2017). ["Plug & Play Generative Networks: Conditional Iterative Generation of Images in Latent Space"](http://arxiv.org/abs/1612.00005v1). Computer Vision and Pattern Recognition.
-
-**If you use this software in an academic article, please consider citing:**
-
-    @inproceedings{nguyen2017plug,
-      title={Plug \& Play Generative Networks: Conditional Iterative Generation of Images in Latent Space},
-      author={Nguyen, Anh and Clune, Jeff and Bengio, Yoshua and Dosovitskiy, Alexey and Yosinski, Jason},
-      booktitle={Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition},
-      year={2017},
-      organization={IEEE}
-    }
-For more information regarding the paper, please visit www.evolvingai.org/ppgn
+The script 'volcano_test.sh' was used on peregrine (but unfortunately failed).
 
 ## 1. Setup
 
