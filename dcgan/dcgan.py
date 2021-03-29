@@ -1,12 +1,6 @@
 from __future__ import print_function, division
 
-from keras.datasets import mnist
-from keras.layers import Input, Dense, Reshape, Flatten, Dropout
-from keras.layers import BatchNormalization, Activation, ZeroPadding2D
-from keras.layers.advanced_activations import LeakyReLU
-from keras.layers.convolutional import UpSampling2D, Conv2D
-from keras.models import Sequential, Model
-from keras.optimizers import Adam
+import tensorflow as tf
 
 import matplotlib.pyplot as plt
 
@@ -23,7 +17,7 @@ class DCGAN():
         self.img_shape = (self.img_rows, self.img_cols, self.channels)
         self.latent_dim = 100
 
-        optimizer = Adam(0.0002, 0.5)
+        optimizer = tf.keras.optimizers.Adam(0.0002, 0.5)
 
         # Build and compile the discriminator
         self.discriminator = self.build_discriminator()
@@ -35,7 +29,7 @@ class DCGAN():
         self.generator = self.build_generator()
 
         # The generator takes noise as input and generates imgs
-        z = Input(shape=(self.latent_dim,))
+        z = tf.keras.layers.Input(shape=(self.latent_dim,))
         img = self.generator(z)
 
         # For the combined model we will only train the generator
@@ -46,67 +40,67 @@ class DCGAN():
 
         # The combined model  (stacked generator and discriminator)
         # Trains the generator to fool the discriminator
-        self.combined = Model(z, valid)
+        self.combined = tf.keras.models.Model(z, valid)
         self.combined.compile(loss='binary_crossentropy', optimizer=optimizer)
 
     def build_generator(self):
 
-        model = Sequential()
+        model = tf.keras.models.Sequential()
 
-        model.add(Dense(128 * 7 * 7, activation="relu", input_dim=self.latent_dim))
-        model.add(Reshape((7, 7, 128)))
-        model.add(UpSampling2D())
-        model.add(Conv2D(128, kernel_size=3, padding="same"))
-        model.add(BatchNormalization(momentum=0.8))
-        model.add(Activation("relu"))
-        model.add(UpSampling2D())
-        model.add(Conv2D(64, kernel_size=3, padding="same"))
-        model.add(BatchNormalization(momentum=0.8))
-        model.add(Activation("relu"))
-        model.add(Conv2D(self.channels, kernel_size=3, padding="same"))
-        model.add(Activation("tanh"))
+        model.add(tf.keras.layers.Dense(128 * 7 * 7, activation="relu", input_dim=self.latent_dim))
+        model.add(tf.keras.layers.Reshape((7, 7, 128)))
+        model.add(tf.keras.layers.UpSampling2D())
+        model.add(tf.keras.layers.Conv2D(128, kernel_size=3, padding="same"))
+        model.add(tf.keras.layers.BatchNormalization(momentum=0.8))
+        model.add(tf.keras.layers.Activation("relu"))
+        model.add(tf.keras.layers.UpSampling2D())
+        model.add(tf.keras.layers.Conv2D(64, kernel_size=3, padding="same"))
+        model.add(tf.keras.layers.BatchNormalization(momentum=0.8))
+        model.add(tf.keras.layers.Activation("relu"))
+        model.add(tf.keras.layers.Conv2D(self.channels, kernel_size=3, padding="same"))
+        model.add(tf.keras.layers.Activation("tanh"))
 
         model.summary()
 
-        noise = Input(shape=(self.latent_dim,))
+        noise = tf.keras.layers.Input(shape=(self.latent_dim,))
         img = model(noise)
 
-        return Model(noise, img)
+        return tf.keras.models.Model(noise, img)
 
     def build_discriminator(self):
 
-        model = Sequential()
+        model = tf.keras.models.Sequential()
 
-        model.add(Conv2D(32, kernel_size=3, strides=2, input_shape=self.img_shape, padding="same"))
-        model.add(LeakyReLU(alpha=0.2))
-        model.add(Dropout(0.25))
-        model.add(Conv2D(64, kernel_size=3, strides=2, padding="same"))
-        model.add(ZeroPadding2D(padding=((0,1),(0,1))))
-        model.add(BatchNormalization(momentum=0.8))
-        model.add(LeakyReLU(alpha=0.2))
-        model.add(Dropout(0.25))
-        model.add(Conv2D(128, kernel_size=3, strides=2, padding="same"))
-        model.add(BatchNormalization(momentum=0.8))
-        model.add(LeakyReLU(alpha=0.2))
-        model.add(Dropout(0.25))
-        model.add(Conv2D(256, kernel_size=3, strides=1, padding="same"))
-        model.add(BatchNormalization(momentum=0.8))
-        model.add(LeakyReLU(alpha=0.2))
-        model.add(Dropout(0.25))
-        model.add(Flatten())
-        model.add(Dense(1, activation='sigmoid'))
+        model.add(tf.keras.layers.Conv2D(32, kernel_size=3, strides=2, input_shape=self.img_shape, padding="same"))
+        model.add(tf.keras.layers.LeakyReLU(alpha=0.2))
+        model.add(tf.keras.layers.Dropout(0.25))
+        model.add(tf.keras.layers.Conv2D(64, kernel_size=3, strides=2, padding="same"))
+        model.add(tf.keras.layers.ZeroPadding2D(padding=((0,1),(0,1))))
+        model.add(tf.keras.layers.BatchNormalization(momentum=0.8))
+        model.add(tf.keras.layers.LeakyReLU(alpha=0.2))
+        model.add(tf.keras.layers.Dropout(0.25))
+        model.add(tf.keras.layers.Conv2D(128, kernel_size=3, strides=2, padding="same"))
+        model.add(tf.keras.layers.BatchNormalization(momentum=0.8))
+        model.add(tf.keras.layers.LeakyReLU(alpha=0.2))
+        model.add(tf.keras.layers.Dropout(0.25))
+        model.add(tf.keras.layers.Conv2D(256, kernel_size=3, strides=1, padding="same"))
+        model.add(tf.keras.layers.BatchNormalization(momentum=0.8))
+        model.add(tf.keras.layers.LeakyReLU(alpha=0.2))
+        model.add(tf.keras.layers.Dropout(0.25))
+        model.add(tf.keras.layers.Flatten())
+        model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
 
         model.summary()
 
-        img = Input(shape=self.img_shape)
+        img = tf.keras.layers.Input(shape=self.img_shape)
         validity = model(img)
 
-        return Model(img, validity)
+        return tf.keras.models.Model(img, validity)
 
     def train(self, epochs, batch_size=128, save_interval=50):
 
         # Load the dataset
-        (X_train, _), (_, _) = mnist.load_data()
+        (X_train, _), (_, _) = tf.keras.datasets.mnist.load_data()
 
         # Rescale -1 to 1
         X_train = X_train / 127.5 - 1.
@@ -148,6 +142,7 @@ class DCGAN():
             # If at save interval => save generated image samples
             if epoch % save_interval == 0:
                 self.save_imgs(epoch)
+                self.combined.save('dcgan/saved_model/mnist.h5')
                 self.generator.save('dcgan/saved_model/mnist-gener.h5')
                 self.discriminator.save('dcgan/saved_model/mnist-discr.h5')
 
