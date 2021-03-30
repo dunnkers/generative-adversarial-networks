@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/generative-adversarial-networks/static/css/main.4383de78.chunk.css",
+    "main.js": "/generative-adversarial-networks/static/js/main.7d4e2054.chunk.js",
+    "main.js.map": "/generative-adversarial-networks/static/js/main.7d4e2054.chunk.js.map",
+    "runtime-main.js": "/generative-adversarial-networks/static/js/runtime-main.ccaeab6f.js",
+    "runtime-main.js.map": "/generative-adversarial-networks/static/js/runtime-main.ccaeab6f.js.map",
+    "static/css/2.00a338ba.chunk.css": "/generative-adversarial-networks/static/css/2.00a338ba.chunk.css",
+    "static/js/2.a5ba5484.chunk.js": "/generative-adversarial-networks/static/js/2.a5ba5484.chunk.js",
+    "static/js/2.a5ba5484.chunk.js.map": "/generative-adversarial-networks/static/js/2.a5ba5484.chunk.js.map",
+    "index.html": "/generative-adversarial-networks/index.html",
+    "precache-manifest.a2d671894a1c248f6f61bb88b4b2122a.js": "/generative-adversarial-networks/precache-manifest.a2d671894a1c248f6f61bb88b4b2122a.js",
+    "service-worker.js": "/generative-adversarial-networks/service-worker.js",
+    "static/css/2.00a338ba.chunk.css.map": "/generative-adversarial-networks/static/css/2.00a338ba.chunk.css.map",
+    "static/css/main.4383de78.chunk.css.map": "/generative-adversarial-networks/static/css/main.4383de78.chunk.css.map",
+    "static/js/2.a5ba5484.chunk.js.LICENSE.txt": "/generative-adversarial-networks/static/js/2.a5ba5484.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.ccaeab6f.js",
+    "static/css/2.00a338ba.chunk.css",
+    "static/js/2.a5ba5484.chunk.js",
+    "static/css/main.4383de78.chunk.css",
+    "static/js/main.7d4e2054.chunk.js"
+  ]
+}
