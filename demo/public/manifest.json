@@ -1,6 +1,6 @@
 {
-  "short_name": "Sign Language Detection",
-  "name": "Sign Language Detection demo using Deep Learning",
+  "short_name": "Painting Van Goghs using GANs",
+  "name": "Painting Van Goghs using GANs",
   "icons": [
     {
       "src": "favicon.ico",

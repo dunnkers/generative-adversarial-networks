@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Result, Spin } from 'antd';
-import InferenceShowcase from './InferenceShowcase';
+import { Alert, Spin } from 'antd';
+import GenerativeShowcase from './GenerativeShowcase';
 import * as tf from '@tensorflow/tfjs';
 
 function ModelShowcase(props) {
   const [state, setState] = useState({
-    msg: 'No model', loading: false, success: false, session: null,
+    msg: 'Loading model...', loading: true, success: false, session: null,
     feedback: 'Load the model to start making inferences.'
   });
 
@@ -16,16 +16,16 @@ function ModelShowcase(props) {
     tf.loadGraphModel(props.modelFile).then(session => {
       console.log('Model successfully loaded.')
 
-      // wait 750ms before showing result
+      // wait a bit before showing result
       setTimeout(() => {
         setState({
-          msg: `Model successfully loaded`,
+          msg: 'Successfully loaded TensorFlow.js model',
           feedback: 'TensorFlow.js is ready for live inferences.',
           // loading: false,
           success: true,
           session
         });
-      }, 750);
+      }, 1500);
     }, res => {
       setState({
         msg: 'Oops, model could not be loaded',
@@ -37,33 +37,23 @@ function ModelShowcase(props) {
     });
   }, [props.modelFile, state.loading]);
 
-  const { modelFile } = props;
-  const filename = modelFile && modelFile.replace(/^.*[\\/]/, '');
-
   return (
     <div style={{ background: 'white', margin: '50px 0' }}>
       <div style={{textAlign: 'center'}}>
-        <div style={{margin: '10px', display: 'inline'}}>{filename}</div>
-        <Button onClick={() => setState({
-          msg: 'Loading...',
-          loading: true,
-          success: true
-        })} disabled={state.loading}>
-          Load model
-        </Button>
-        <Result
-          status={state.success ? 'success' : 
+        <Alert
+          message={state.msg}
+          // description={<code>{state.feedback}</code>}
+          type={state.success ? 'success' : 
             (state.failure ? 'error' : 'info')}
-          title={state.msg}
-          subTitle={<code>{state.feedback}</code>}
-          icon={state.loading && <Spin style={{height: 72}} />}
+          icon={state.loading ? <Spin style={{ float: 'left' }}/> : undefined}
+          showIcon
         />
       </div>
 
       {props.children && 
       (props.children.map ? props.children : [props.children])
         .map((child, i) => {
-        if (child.type === InferenceShowcase)
+        if (child.type === GenerativeShowcase)
           return React.cloneElement(child, {
             key: i,
             session: state.session,

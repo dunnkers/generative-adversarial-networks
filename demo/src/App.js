@@ -11,9 +11,9 @@ function App() {
   return (
     <article className="App">
       <header className="App-header">
-        <h1>GAN's</h1>
+        <h1>Painting Van Goghs using GANs</h1>
         <h4>
-          <Text type="secondary">Using Deep Learning with Keras</Text>
+          <Text type="secondary">Using Deep Learning with TensorFlow/Keras</Text>
         </h4>
       </header>
       <ModelShowcase modelFile={p+'/mnist/model.json'} model={0}>
