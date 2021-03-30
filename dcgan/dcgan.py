@@ -1,19 +1,26 @@
 from __future__ import print_function, division
-
 import tensorflow as tf
-
 import matplotlib.pyplot as plt
-
-import sys
-
+from pathlib import Path
+import pandas as pd
 import numpy as np
+from argparse import ArgumentParser
+import os
 
 class DCGAN():
-    def __init__(self):
+    def __init__(self,
+        dataset,
+        saved_model='saved_model',
+        output_images='images'):
+        # Args
+        self.dataset = dataset
+        self.saved_model = saved_model
+        self.output_images = output_images
+
         # Input shape
         self.img_rows = 28
         self.img_cols = 28
-        self.channels = 1
+        self.channels = 3
         self.img_shape = (self.img_rows, self.img_cols, self.channels)
         self.latent_dim = 100
 
@@ -98,13 +105,18 @@ class DCGAN():
         return tf.keras.models.Model(img, validity)
 
     def train(self, epochs, batch_size=128, save_interval=50):
-
-        # Load the dataset
-        (X_train, _), (_, _) = tf.keras.datasets.mnist.load_data()
-
-        # Rescale -1 to 1
-        X_train = X_train / 127.5 - 1.
-        X_train = np.expand_dims(X_train, axis=3)
+        # Dataset
+        gen = tf.keras.preprocessing.image.ImageDataGenerator(
+            preprocessing_function=lambda x: x/127.5 - 1.
+        )
+        files = Path(self.dataset).rglob('*.jpg')
+        files = map(os.path.abspath, files)
+        df = pd.DataFrame({'filename': files})
+        if not len(df): exit('No images found.')
+        ds = gen.flow_from_dataframe(df,
+            class_mode=None,
+            batch_size=batch_size,
+            target_size=(self.img_rows, self.img_cols))
 
         # Adversarial ground truths
         valid = np.ones((batch_size, 1))
@@ -116,9 +128,8 @@ class DCGAN():
             #  Train Discriminator
             # ---------------------
 
-            # Select a random half of images
-            idx = np.random.randint(0, X_train.shape[0], batch_size)
-            imgs = X_train[idx]
+            # Get a random batch
+            imgs = next(ds)
 
             # Sample noise and generate a batch of new images
             noise = np.random.normal(0, 1, (batch_size, self.latent_dim))
@@ -142,9 +153,9 @@ class DCGAN():
             # If at save interval => save generated image samples
             if epoch % save_interval == 0:
                 self.save_imgs(epoch)
-                self.combined.save('dcgan/saved_model/mnist.h5')
-                self.generator.save('dcgan/saved_model/mnist-gener.h5')
-                self.discriminator.save('dcgan/saved_model/mnist-discr.h5')
+                self.combined.save(f'{self.saved_model}/combined.h5')
+                self.generator.save(f'{self.saved_model}/generator.h5')
+                self.discriminator.save(f'{self.saved_model}/discriminator.h5')
 
     def save_imgs(self, epoch):
         r, c = 5, 5
@@ -158,13 +169,17 @@ class DCGAN():
         cnt = 0
         for i in range(r):
             for j in range(c):
-                axs[i,j].imshow(gen_imgs[cnt, :,:,0], cmap='gray')
+                axs[i,j].imshow(gen_imgs[cnt, :,:,:])
                 axs[i,j].axis('off')
                 cnt += 1
-        fig.savefig("dcgan/images/mnist_%d.png" % epoch)
+        fig.savefig(f'{self.output_images}/epoch_{epoch}.png')
         plt.close()
 
 
 if __name__ == '__main__':
-    dcgan = DCGAN()
-    dcgan.train(epochs=40000, batch_size=32, save_interval=50)
+    arg_parser = ArgumentParser()
+    arg_parser.add_argument('--dataset', type=str, required=True)
+    arg_parser.add_argument('--output-images', type=str, required=True)
+    arg_parser.add_argument('--saved-model', type=str, required=True)
+    dcgan = DCGAN(**vars(arg_parser.parse_args()))
+    dcgan.train(epochs=4000, batch_size=32, save_interval=50)

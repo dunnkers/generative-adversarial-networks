@@ -1,16 +1,9 @@
 import logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s:%(message)s')
 import os
-import csv
-import shutil
 import math
 import cv2
-import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.mlab as mlab
-from skimage import filters
-import scipy
 from argparse import ArgumentParser
 if os.path.dirname(__file__) != '':
     os.chdir(os.path.dirname(__file__))
