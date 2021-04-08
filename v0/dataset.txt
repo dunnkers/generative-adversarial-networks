@@ -1,3 +1,0 @@
-Extract the 11 folders of painting from the dataset here.
-
-https://www.kaggle.com/ipythonx/van-gogh-paintings

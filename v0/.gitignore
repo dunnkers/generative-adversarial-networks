@@ -4,4 +4,6 @@ dataset/
 saturation_pictures/
 saturation_pictures_filtered/
 dataset**/
+results/
+**.h5
 
