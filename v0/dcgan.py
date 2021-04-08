@@ -22,9 +22,11 @@ def get_args():
         Dataset folder
     ''')
 
-    arg_parser.add_argument('--autoencoder-warmup', type=int, default=100, help='''
+    arg_parser.add_argument('--encoder-warmup', type=int, default=100, help='''
         Number of epochs to train just the autoencoder
     ''')
+
+    arg_parser.add_argument('--no-encoder', action='store_true', help="Do not train the encoder component.")
 
     arg_parser.add_argument('--batch-size', type=int, default=16, help='''
         Batch size to use during training
@@ -321,29 +323,38 @@ if __name__ == '__main__':
         print(f"NOTE: The weights produced by this training run will be stored in: {args.weights_dir}")
         batch_generator = data_generator()#(dynamic=True)
 
-        for epoch in range(autoencoder_pretrain_epochs):
-            start = time.time()
-            for image_batch, batches_left in batch_generator:
-                print("\r%-3d batches left.   " % batches_left, end='\r')
-                autoenc_loss = autoencoder.train_on_batch(image_batch, image_batch)
-                if batches_left == 0:
-                    real_latent_vec = encoder(image_batch[:1])
-                    break
-            print("%-4d Autoencoder loss: %8.4e -- Time: %6.3fs" % (epoch+1, autoenc_loss, time.time()-start))
-            generate_and_save_images(generator, epoch, real_latent_vec)
-            store_weights()
+        i = 0
+
+        if not args.no_encoder:
+            for epoch in range(autoencoder_pretrain_epochs):
+                start = time.time()
+                for image_batch, batches_left in batch_generator:
+                    print("\r%-3d batches left.   " % batches_left, end='\r')
+                    autoenc_loss = autoencoder.train_on_batch(image_batch, image_batch)
+                    if batches_left == 0:
+                        real_latent_vec = encoder(image_batch[:1])
+                        break
+                print("%-4d Autoencoder loss: %8.4e -- Time: %6.3fs" % (epoch+1, autoenc_loss, time.time()-start))
+                generate_and_save_images(generator, i, real_latent_vec)
+                store_weights()
+                i += 1
         
         for epoch in range(epochs):
             start = time.time()
             for image_batch, batches_left in batch_generator:
                 print("\r%-3d batches left.   " % batches_left, end='\r')
-                autoenc_loss = autoencoder.train_on_batch(image_batch, image_batch)
+                if not args.no_encoder:
+                    autoenc_loss = autoencoder.train_on_batch(image_batch, image_batch)
                 gen_loss, disc_loss = train_step(image_batch)
                 if batches_left == 0:
                     real_latent_vec = encoder(image_batch[:1])
                     break
-            print("%-4d Generator loss: %8.4e -- Discriminator loss: %8.4e -- Autoencoder loss: %8.4e -- Time: %6.3fs" % (epoch+1, gen_loss, disc_loss, autoenc_loss, time.time()-start))
-            generate_and_save_images(generator, epoch + autoencoder_pretrain_epochs, real_latent_vec)
+            if not args.no_encoder:
+                print("%-4d Generator loss: %8.4e -- Discriminator loss: %8.4e -- Autoencoder loss: %8.4e -- Time: %6.3fs" % (epoch+1, gen_loss, disc_loss, autoenc_loss, time.time()-start))
+            else:
+                print("%-4d Generator loss: %8.4e -- Discriminator loss: %8.4e -- -- Time: %6.3fs" % (epoch+1, gen_loss, disc_loss, time.time()-start))
+            generate_and_save_images(generator, i, real_latent_vec)
             store_weights()
+            i += 1
 
-    train(image_batch_generator, epochs = 2000, autoencoder_pretrain_epochs=args.autoencoder_warmup)
+    train(image_batch_generator, epochs = 2000, autoencoder_pretrain_epochs=args.encoder_warmup)
