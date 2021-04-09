@@ -5,7 +5,7 @@ if os.path.dirname(__file__) != '':
     os.chdir(os.path.dirname(__file__))
 import tensorflow as tf
 import time
-import cv2
+# import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 from tensorflow.keras import layers
