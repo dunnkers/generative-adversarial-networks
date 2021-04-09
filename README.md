@@ -22,12 +22,12 @@ The dataset will now be available in `data_dir` 💪🏻.
 → in the case of Peregrine, it is recommended to set `data_dir` to somewhere in `/data/<s_number>/`.
 
 ### Data augmentation
-Although Van Gogh was a very productive painter, training a GAN still requires some more images. Follow the relevant instructions in the `v0` directory to augment the dataset. Augmentation will adjust image- brightness, shearing, cropping, resizing and adding random noise. Example of an augmented images:
+Although Van Gogh was a very productive painter, training a GAN still requires some more images. Follow the relevant instructions in the `dcgan` directory to augment the dataset. Augmentation will adjust image- brightness, shearing, cropping, resizing and adding random noise. Example of an augmented images:
 
 ![augmentations](report/img/data_aug/all.png)
 
 ## Training
-Training can be done with DCGAN or StyleGAN. See `v0` for instructions on training DCGAN, and `stylegan` for instructions on training StyleGAN.
+Training can be done with DCGAN or StyleGAN. See `dcgan` for instructions on training DCGAN, and `stylegan` for instructions on training StyleGAN.
 
 _Note_: The `ppgn` directory contains code for the Plug and Play network and is there for archival purposes; it is something we eventually decided to discontinue.
 
