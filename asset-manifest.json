@@ -1,25 +1,25 @@
 {
   "files": {
     "main.css": "/generative-adversarial-networks/static/css/main.4383de78.chunk.css",
-    "main.js": "/generative-adversarial-networks/static/js/main.4af64d1b.chunk.js",
-    "main.js.map": "/generative-adversarial-networks/static/js/main.4af64d1b.chunk.js.map",
+    "main.js": "/generative-adversarial-networks/static/js/main.1ea74c67.chunk.js",
+    "main.js.map": "/generative-adversarial-networks/static/js/main.1ea74c67.chunk.js.map",
     "runtime-main.js": "/generative-adversarial-networks/static/js/runtime-main.ccaeab6f.js",
     "runtime-main.js.map": "/generative-adversarial-networks/static/js/runtime-main.ccaeab6f.js.map",
     "static/css/2.00a338ba.chunk.css": "/generative-adversarial-networks/static/css/2.00a338ba.chunk.css",
-    "static/js/2.a5ba5484.chunk.js": "/generative-adversarial-networks/static/js/2.a5ba5484.chunk.js",
-    "static/js/2.a5ba5484.chunk.js.map": "/generative-adversarial-networks/static/js/2.a5ba5484.chunk.js.map",
+    "static/js/2.242b2617.chunk.js": "/generative-adversarial-networks/static/js/2.242b2617.chunk.js",
+    "static/js/2.242b2617.chunk.js.map": "/generative-adversarial-networks/static/js/2.242b2617.chunk.js.map",
     "index.html": "/generative-adversarial-networks/index.html",
-    "precache-manifest.be475923c8ccd61fa1d5250591143de2.js": "/generative-adversarial-networks/precache-manifest.be475923c8ccd61fa1d5250591143de2.js",
+    "precache-manifest.8700273d22e53f823e4038c837f4c236.js": "/generative-adversarial-networks/precache-manifest.8700273d22e53f823e4038c837f4c236.js",
     "service-worker.js": "/generative-adversarial-networks/service-worker.js",
     "static/css/2.00a338ba.chunk.css.map": "/generative-adversarial-networks/static/css/2.00a338ba.chunk.css.map",
     "static/css/main.4383de78.chunk.css.map": "/generative-adversarial-networks/static/css/main.4383de78.chunk.css.map",
-    "static/js/2.a5ba5484.chunk.js.LICENSE.txt": "/generative-adversarial-networks/static/js/2.a5ba5484.chunk.js.LICENSE.txt"
+    "static/js/2.242b2617.chunk.js.LICENSE.txt": "/generative-adversarial-networks/static/js/2.242b2617.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.ccaeab6f.js",
     "static/css/2.00a338ba.chunk.css",
-    "static/js/2.a5ba5484.chunk.js",
+    "static/js/2.242b2617.chunk.js",
     "static/css/main.4383de78.chunk.css",
-    "static/js/main.4af64d1b.chunk.js"
+    "static/js/main.1ea74c67.chunk.js"
   ]
 }
