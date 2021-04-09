@@ -9,18 +9,56 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 from tensorflow.keras import layers
+from argparse import ArgumentParser
+import sys
 print(tf.__version__)
+from datetime import datetime
+now = datetime.now()
 
-dataset_folder = "C:\\Users\\thijs\\Documents\\Studie\\IIa\\Deep Learning\\deep_learning_2_dataset\\dataset\\"
-results_dir = "results"
-#latent_dims = 2048
-latent_dims = 32
-latent_dims_half = latent_dims//2
-output_channels = 3
-image_dims = (212, 212)
-batch_size = 16
-test_examples = (2,2)
-test_input = np.random.normal(0, 1, (test_examples[0]*test_examples[1], latent_dims))
+def get_args():
+    arg_parser = ArgumentParser()
+    
+    arg_parser.add_argument('--dataset-folder', type=str, default='dataset', help='''
+        Dataset folder
+    ''')
+
+    arg_parser.add_argument('--encoder-warmup', type=int, default=100, help='''
+        Number of epochs to train just the autoencoder
+    ''')
+
+    arg_parser.add_argument('--no-encoder', action='store_true', help="Do not train the encoder component.")
+
+    arg_parser.add_argument('--batch-size', type=int, default=16, help='''
+        Batch size to use during training
+    ''')
+
+    arg_parser.add_argument('--learning-rate', type=float, default=0.0001, help='''
+        Learning rate to apply for the varius Nadam optimizers (default: 0.0001)
+    ''')
+
+    arg_parser.add_argument('--weights-dir', type=str, default=os.path.join("saved_states", now.strftime('%Y-%m-%d_%H%M%S')), 
+    help=f"Directory to store the model weights for later loading (default: time string, .e.g. saved_states/{now.strftime('%Y-%m-%d_%H%M%S')}).")
+
+    arg_parser.add_argument('--load-weights', type=str, default="", 
+    help=f"Directory to load the initial model weights from.")
+
+    return arg_parser.parse_args()
+
+
+if __name__ == '__main__':
+    args = get_args()
+
+    dataset_folder = args.dataset_folder
+    results_dir = "results"
+    latent_dims = 64
+    latent_dims_half = latent_dims//2
+    output_channels = 3
+    image_dims = (212, 212)
+    batch_size = args.batch_size
+    test_examples = (2,2)
+    test_input = np.random.normal(0, 1, (test_examples[0]*test_examples[1], latent_dims))
+    os.makedirs(args.weights_dir, exist_ok=True)
+
 
 def make_encoder_model():
     model = tf.keras.Sequential()
@@ -165,28 +203,42 @@ def make_discriminator_model():
 
     return model
 
-def image_batch_generator():
+def image_batch_generator(dynamic=False):
     img_list = [os.path.join(dataset_folder, img_name) for img_name in os.listdir(dataset_folder)]
     n_samples = len(img_list)
-    indices = np.arange(0, n_samples)
-    indices = np.concatenate([indices, np.random.randint(0, n_samples, (batch_size - n_samples) % batch_size)])
-    n_batches = indices.shape[0] // batch_size
-    indices = np.reshape(indices, (n_batches, batch_size))
 
-    imgs = np.zeros( (batch_size, image_dims[0], image_dims[1], output_channels) )
-    for n in range(n_batches):
-        idx = indices[n,:]
-        for k, i in enumerate(idx):
-            imgs[k,:,:,:] = cv2.imread(img_list[i])/ 255.
-        batches_left = n_batches - 1 - n
-        yield imgs, batches_left
+    if not dynamic:
+        samples = np.zeros( (n_samples, image_dims[0], image_dims[1], output_channels) )
+        for n in range(n_samples):
+            samples[n,:,:,:] = cv2.imread(img_list[n])/ 255.
+
+    while True:
+        if dynamic:
+            indices = np.concatenate([np.arange(0, n_samples), np.random.randint(0, n_samples, (batch_size - n_samples) % batch_size)])
+            n_batches = indices.shape[0] // batch_size
+            indices = np.reshape(indices, (n_batches, batch_size))
+            imgs = np.zeros( (batch_size, image_dims[0], image_dims[1], output_channels) )
+            for n in range(n_batches):
+                idx = indices[n,:]
+                for k, i in enumerate(idx):
+                    imgs[k,:,:,:] = cv2.imread(img_list[i])/ 255.
+                batches_left = n_batches - 1 - n
+                yield imgs, batches_left
+        else:
+            indices = np.concatenate([np.arange(0, n_samples), np.random.randint(0, n_samples, (batch_size - n_samples) % batch_size)])
+            n_batches = indices.shape[0] // batch_size
+            indices = np.reshape(indices, (n_batches, batch_size))
+            for n in range(n_batches):
+                batches_left = n_batches - 1 - n
+                yield samples[indices[n,:]], batches_left
+            
 
 def generate_and_save_images(model, epoch, real_latent_vec):
   global test_examples, test_input
   # Notice `training` is set to False.
   # This is so all layers run in inference mode (batchnorm).
   test_input = np.random.normal(0, 1, (test_examples[0]*test_examples[1], latent_dims))
-  test_input[0,:] = real_latent_vec[0]
+  #test_input[0,:] = real_latent_vec[0]
   predictions = model(test_input, training=False)
 
   fig = plt.figure(figsize=(10,10))
@@ -211,15 +263,27 @@ if __name__ == '__main__':
     discriminator = make_discriminator_model()
     print("\nDISCRIMINATOR:")
     discriminator.summary()
+
+    if args.load_weights != "":
+        print(f"Loading weights from {args.load_weights}!")
+        encoder.load_weights( os.path.join(args.load_weights, "encoder.h5")) 
+        generator.load_weights( os.path.join(args.load_weights, "generator.h5")) 
+        discriminator.load_weights( os.path.join(args.load_weights, "discriminator.h5")) 
+
     img = layers.Input(shape=(image_dims[0], image_dims[1], output_channels))
     autoencoder = tf.keras.Model(img, generator(encoder(img)))
-    autoencoder.compile(optimizer=tf.keras.optimizers.Nadam(1e-4), loss='mse')
+    autoencoder.compile(optimizer=tf.keras.optimizers.Nadam(args.learning_rate), loss='mse')
     print("\nAUTOENCODER:")
     autoencoder.summary()
 
-    generator_optimizer = tf.keras.optimizers.Nadam(1e-4)
-    discriminator_optimizer = tf.keras.optimizers.Nadam(1e-4)
+    generator_optimizer = tf.keras.optimizers.Nadam(args.learning_rate)
+    discriminator_optimizer = tf.keras.optimizers.Nadam(args.learning_rate)
     cross_entropy = tf.keras.losses.BinaryCrossentropy(from_logits=True)
+
+    def store_weights():
+        encoder.save_weights( os.path.join(args.weights_dir, "encoder.h5") )
+        generator.save_weights( os.path.join(args.weights_dir, "generator.h5") )
+        discriminator.save_weights( os.path.join(args.weights_dir, "discriminator.h5") )
 
     def generator_loss(fake_output):
         return cross_entropy(tf.ones_like(fake_output), fake_output)
@@ -256,20 +320,41 @@ if __name__ == '__main__':
         
 
     def train(data_generator, epochs, autoencoder_pretrain_epochs=0):
-        for epoch in range(autoencoder_pretrain_epochs):
-            start = time.time()
-            for image_batch, batches_left in data_generator():
-                autoenc_loss = autoencoder.train_on_batch(image_batch, image_batch)
-            print("%-4d Autoencoder loss: %8.4e -- Time: %6.3fs" % (epoch+1, autoenc_loss, time.time()-start))
+        print(f"NOTE: The weights produced by this training run will be stored in: {args.weights_dir}")
+        batch_generator = data_generator()#(dynamic=True)
+
+        i = 0
+
+        if not args.no_encoder:
+            for epoch in range(autoencoder_pretrain_epochs):
+                start = time.time()
+                for image_batch, batches_left in batch_generator:
+                    print("\r%-3d batches left.   " % batches_left, end='\r')
+                    autoenc_loss = autoencoder.train_on_batch(image_batch, image_batch)
+                    if batches_left == 0:
+                        real_latent_vec = encoder(image_batch[:1])
+                        break
+                print("%-4d Autoencoder loss: %8.4e -- Time: %6.3fs" % (epoch+1, autoenc_loss, time.time()-start))
+                generate_and_save_images(generator, i, real_latent_vec)
+                store_weights()
+                i += 1
         
         for epoch in range(epochs):
             start = time.time()
-            for image_batch, batches_left in data_generator():
-                autoenc_loss = autoencoder.train_on_batch(image_batch, image_batch)
+            for image_batch, batches_left in batch_generator:
+                print("\r%-3d batches left.   " % batches_left, end='\r')
+                if not args.no_encoder:
+                    autoenc_loss = autoencoder.train_on_batch(image_batch, image_batch)
                 gen_loss, disc_loss = train_step(image_batch)
                 if batches_left == 0:
                     real_latent_vec = encoder(image_batch[:1])
-            print("%-4d Generator loss: %8.4e -- Discriminator loss: %8.4e -- Autoencoder loss: %8.4e -- Time: %6.3fs" % (epoch+1, gen_loss, disc_loss, autoenc_loss, time.time()-start))
-            generate_and_save_images(generator, epoch, real_latent_vec)
+                    break
+            if not args.no_encoder:
+                print("%-4d Generator loss: %8.4e -- Discriminator loss: %8.4e -- Autoencoder loss: %8.4e -- Time: %6.3fs" % (epoch+1, gen_loss, disc_loss, autoenc_loss, time.time()-start))
+            else:
+                print("%-4d Generator loss: %8.4e -- Discriminator loss: %8.4e -- -- Time: %6.3fs" % (epoch+1, gen_loss, disc_loss, time.time()-start))
+            generate_and_save_images(generator, i, real_latent_vec)
+            store_weights()
+            i += 1
 
-    train(image_batch_generator, epochs = 2000, autoencoder_pretrain_epochs=0)
+    train(image_batch_generator, epochs = 2000, autoencoder_pretrain_epochs=args.encoder_warmup)
