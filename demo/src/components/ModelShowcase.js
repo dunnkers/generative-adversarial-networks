@@ -38,7 +38,10 @@ function ModelShowcase(props) {
   }, [props.modelFile, state.loading]);
 
   return (
-    <div style={{ background: 'white', margin: '50px 0' }}>
+    <div style={{
+        background: 'white', margin: '50px 0',
+        display: 'flex', flexDirection: 'column', alignItems: 'center'
+      }}>
       <div style={{textAlign: 'center'}}>
         <Alert
           message={state.msg}
@@ -47,6 +50,7 @@ function ModelShowcase(props) {
             (state.failure ? 'error' : 'info')}
           icon={state.loading ? <Spin style={{ float: 'left' }}/> : undefined}
           showIcon
+          style={{ maxWidth: '450px', minWidth: '200px' }}
         />
       </div>
 
