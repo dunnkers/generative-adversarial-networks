@@ -43,7 +43,7 @@ Either run `python train.py` for an interactive training run or `sbatch train_jo
 
 To calculate the Fréchet Inception distances (FIDs) from the network snapshots created during training, you can use `run_metrics.py`. Open the file and look for something like the following code block:
 
-```{python}
+```python
 # Which networks to evaluate them on?
 tasks = []
 tasks += [EasyDict(run_func_name='run_metrics.run_pickle', network_pkl='https://drive.google.com/uc?id=1MEGjdvVpUsu1jB4zrXZN7Y4kBBOzizDQ', dataset_args=EasyDict(tfrecord_dir='ffhq', shuffle_mb=0), mirror_augment=True)] # karras2019stylegan-ffhq-1024x1024.pkl
