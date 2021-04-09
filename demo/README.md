@@ -1,5 +1,5 @@
 # Demo
-Demo in React.js. Uses [Ant Design](https://ant.design/) as a UI framework and [ONNX.js](https://github.com/microsoft/onnxjs) to do live ONNX model inferences.
+Uses TensorFlow.js to load the DCGAN model in your browser, such that you can do live inferences ☀️.
 
 ## Usage
 
@@ -11,10 +11,4 @@ yarn
 2. Run the create-react-app server
 ```shell
 yarn start
-```
-
-## Using Docker / docker-compose:
-1. Run docker-compose
-```
-docker-compose up
 ```
