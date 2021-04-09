@@ -2,7 +2,7 @@
 
 This folder comes with code from the official StyleGAN repository as well as some job scripts. Designed specifically for the Peregrine RUG HPC.
 
-![Example StyleGAN image](images/uncurated_resumed.png)
+[![Example StyleGAN image](images/uncurated_resumed_smaller.png)](https://github.com/dunnkers/generative-adversarial-networks/blob/master/stylegan/images/uncurated_resumed.png)
 
 ## How to get going
 
