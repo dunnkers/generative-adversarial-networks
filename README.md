@@ -20,5 +20,14 @@ unzip -n $data_dir/van-gogh-paintings.zip -d $data_dir
 The dataset will now be available in `data_dir` 💪🏻.
 
 → in the case of Peregrine, it is recommended to set `data_dir` to somewhere in `/data/<s_number>/`.
+
+### Data augmentation
+Although Van Gogh was a very productive painter, training a GAN still requires some more images. Follow the relevant instructions in the `v0` directory to augment the dataset.
+
+## Training
+Training can be done with DCGAN or StyleGAN. See `v0` for instructions on training DCGAN, and `stylegan` for instructions on training StyleGAN.
+
+_Note_: The `ppgn` directory contains code for the Plug and Play network and is there for archival purposes; it is something we eventually decided to discontinue.
+
 ## About
 By Loran Knol, Elisa Oostwal, Thijs Havinga and Jeroen Overschie.
