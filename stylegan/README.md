@@ -36,3 +36,23 @@ There is a `train_job.sh` file for submitting a training run as a Peregrine job.
 ## Train the network
 
 Either run `python train.py` for an interactive training run or `sbatch train_job.sh` to submit it as a job.
+
+## Post-processing
+
+### Fréchet Inception distances
+
+To calculate the Fréchet Inception distances (FIDs) from the network snapshots created during training, you can use `run_metrics.py`. Open the file and look for something like the following code block:
+
+```{python}
+# Which networks to evaluate them on?
+tasks = []
+tasks += [EasyDict(run_func_name='run_metrics.run_pickle', network_pkl='https://drive.google.com/uc?id=1MEGjdvVpUsu1jB4zrXZN7Y4kBBOzizDQ', dataset_args=EasyDict(tfrecord_dir='ffhq', shuffle_mb=0), mirror_augment=True)] # karras2019stylegan-ffhq-1024x1024.pkl
+#tasks += [EasyDict(run_func_name='run_metrics.run_snapshot', run_id=100, snapshot=25000)]
+#tasks += [EasyDict(run_func_name='run_metrics.run_all_snapshots', run_id=100)]
+```
+
+Comment the first line and uncomment the second line (if you want to evaluate one specific snapshot) or the third line (if you want to evaluate all snapshots from a single run). Modify `run_id` to equal the ID mentioned in the name of the directory that resides in its parent directory `results`. If applicable, also modify `snapshot` to the number of the desired snapshot.
+
+### Generating figures
+
+The Jupyter notebook file postprocessing.ipynb contains some code for generating the StyleGAN-associated figures used in the report. For most figures, it contains specific `path` variables that probably need to be adjusted to your results. From there, it should run as-is.
