@@ -16,7 +16,11 @@ function App() {
           <Text type="secondary">Using Deep Learning with TensorFlow/Keras</Text>
         </h4>
       </header>
-      <ModelShowcase modelFile={p+'/mnist/model.json'} model={0}>
+      {/* <ModelShowcase modelFile={p+'/dcgan-mnist/model.json'} model={0}>
+
+        <GenerativeShowcase />
+      </ModelShowcase> */}
+      <ModelShowcase modelFile={p+'/dcgan-gogh/model.json'} model={0}>
 
         <GenerativeShowcase />
       </ModelShowcase>

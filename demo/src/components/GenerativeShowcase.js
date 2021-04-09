@@ -5,17 +5,21 @@ import * as tf from '@tensorflow/tfjs';
 function GenerativeShowcase(props) {
   const canvasElement = useRef(null);
   const [init, setInit] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const gen = () => {
     setInit(true);
+    setLoading(true);
     const session = props.session;
-    const tensor = tf.truncatedNormal([1, 100])
+    const tensor = tf.truncatedNormal([1, 64])
     
     const outputData = session.predict(tensor);
-    const rescaled = outputData.mul(0.5).add(0.5);
+    // const rescaled = outputData.mul(0.5).add(0.5);
+    const rescaled = outputData;
     const resized = tf.image.resizeBilinear(rescaled, [256, 256]);
     const output = resized.gather(0);
     tf.browser.toPixels(output, canvasElement.current);
+    setLoading(false);
   };
   
   const canv = init ? 'inline' : 'none';
@@ -33,7 +37,7 @@ function GenerativeShowcase(props) {
           }/>
       </div>}
       extra={
-        <Button onClick={gen} disabled={!props.session}>
+        <Button onClick={gen} disabled={!props.session} loading={loading}>
           Generate image
         </Button>
       }
