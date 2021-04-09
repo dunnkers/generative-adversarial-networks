@@ -2,6 +2,8 @@
 
 This folder comes with code from the official StyleGAN repository as well as some job scripts. Designed specifically for the Peregrine RUG HPC.
 
+![Example StyleGAN image](images/uncurated_resumed.png)
+
 ## How to get going
 
 1. First load the correct module: `module load TensorFlow/1.10.1-fosscuda-2018a-Python-3.6.4`
@@ -51,7 +53,9 @@ tasks += [EasyDict(run_func_name='run_metrics.run_pickle', network_pkl='https://
 #tasks += [EasyDict(run_func_name='run_metrics.run_all_snapshots', run_id=100)]
 ```
 
-Comment the first line and uncomment the second line (if you want to evaluate one specific snapshot) or the third line (if you want to evaluate all snapshots from a single run). Modify `run_id` to equal the ID mentioned in the name of the directory that resides in its parent directory `results`. If applicable, also modify `snapshot` to the number of the desired snapshot.
+Comment the first line and uncomment the second line (if you want to evaluate one specific snapshot) or the third line (if you want to evaluate all snapshots from a single run). Modify `run_id` to equal the ID mentioned in the name of the directory that resides in its parent directory `results`. If applicable, also modify `snapshot` to the number of the desired snapshot. Save the file when you are done.
+
+Finally, run `python run_metrics.py`. Depending on the resolution size associated with the snapshot and your hardware setup, calculating the FID for one snapshot could take anywhere from a few minutes to an hour.
 
 ### Generating figures
 
