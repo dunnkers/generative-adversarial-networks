@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/generative-adversarial-networks/precache-manifest.8700273d22e53f823e4038c837f4c236.js"
+  "/generative-adversarial-networks/precache-manifest.ec6c56e4311768664ee6ab010b01f2c3.js"
 );
 
 self.addEventListener('message', (event) => {
