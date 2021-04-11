@@ -6,18 +6,32 @@ function GenerativeShowcase(props) {
   const canvasElement = useRef(null);
   const [state, setState] = useState({
     init: false,
-    generating: false
+    generating: false,
+    sentOffscreen: false
   });
+  
+  useEffect(() => {
+    const hasOffscreen = 'OffscreenCanvas' in window;
+    if (!state.sentOffscreen && hasOffscreen) {
+      const offscreen = canvasElement.current.transferControlToOffscreen();
+      props.worker.postMessage({canvas: offscreen}, [offscreen]);
+      setState(state => ({ ...state, sentOffscreen: true }));
+    }
 
-  useEffect(async () => {
     if (!state.generating) return;
 
-    await props.worker.predict().then(output => {
-      const tensor = new tf.tensor3d(output);
-      tf.browser.toPixels(tensor, canvasElement.current);
-      setState({ init: true, generating: false });
-    });
-  }, [props.worker, state.init, state.generating]);
+    async function infer() {
+      await props.worker.predict().then(output => {
+        if (output) {
+          console.log('Rendering in browser...');
+          const tensor = new tf.tensor3d(output);
+          tf.browser.toPixels(tensor, canvasElement.current);
+        }
+        setState({ init: true, generating: false, sentOffscreen: true });
+      });
+    }
+    infer();
+  }, [props.worker, state.init, state.generating, state.sentOffscreen]);
   
   const canv = state.init ? 'inline' : 'none';
   const empt = state.init ? 'none' : 'inline';

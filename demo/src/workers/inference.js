@@ -1,5 +1,7 @@
 import * as tf from '@tensorflow/tfjs';
+
 let session;
+let canvas;
 
 export function loadModel(modelFile) {
     return tf.loadGraphModel(modelFile).then(sess => {
@@ -17,5 +19,17 @@ export function predict() {
     const rescaled = outputData;
     const resized = tf.image.resizeBilinear(rescaled, [256, 256]);
     const output = resized.gather(0);
-    return output.array();
+    if (canvas) {
+        tf.browser.toPixels(output, canvas);
+        return;
+    } else {
+        return output.array();
+    }
 }
+
+onmessage = function(ev) {
+    if (ev.data && ev.data.canvas) {
+        if (!canvas) canvas = ev.data.canvas;
+    }
+  }
+  
