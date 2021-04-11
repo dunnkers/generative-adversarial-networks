@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, Spin } from 'antd';
 import GenerativeShowcase from './GenerativeShowcase';
-import * as tf from '@tensorflow/tfjs';
 
 function ModelShowcase(props) {
   const [state, setState] = useState({
@@ -13,29 +12,28 @@ function ModelShowcase(props) {
   useEffect(() => {
     if (!state.loading) return; // was not initiated
 
-    tf.loadGraphModel(props.modelFile).then(session => {
-      console.log('Model successfully loaded.')
-
-      // wait a bit before showing result
-      setTimeout(() => {
+    props.worker.loadModel(props.modelFile).then(response => {
+      const { result } = response;
+      if (result) {
+        // wait a bit before showing result
+        setTimeout(() => {
+          setState({
+            msg: 'Successfully loaded TensorFlow.js model',
+            feedback: 'TensorFlow.js is ready for live inferences.',
+            success: true
+          });
+        }, 1500);
+      } else {
         setState({
-          msg: 'Successfully loaded TensorFlow.js model',
-          feedback: 'TensorFlow.js is ready for live inferences.',
-          // loading: false,
-          success: true,
-          session
+          msg: 'Oops, model could not be loaded',
+          feedback: response.res.message,
+          loading: false,
+          failure: true
         });
-      }, 1500);
-    }, res => {
-      setState({
-        msg: 'Oops, model could not be loaded',
-        feedback: res.message,
-        loading: false,
-        failure: true
-      });
-      console.warn('Model failed to load', res)
+        console.warn('Model failed to load', response.res)
+      }
     });
-  }, [props.modelFile, state.loading]);
+  }, [props.modelFile, state.loading, props.worker]);
 
   return (
     <div style={{
@@ -60,9 +58,8 @@ function ModelShowcase(props) {
         if (child.type === GenerativeShowcase)
           return React.cloneElement(child, {
             key: i,
-            session: state.session,
-            model: props.model,
-            crop: props.crop
+            session: state.success,
+            worker: props.worker
           });
         return child;
       })}

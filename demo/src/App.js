@@ -3,10 +3,13 @@ import { Typography } from 'antd';
 import './App.css';
 import ModelShowcase from './components/ModelShowcase';
 import GenerativeShowcase from './components/GenerativeShowcase';
+import InferenceWorker from 'workerize-loader!./workers/inference' // eslint-disable-line import/no-webpack-loader-syntax
 const { Text, Link, Paragraph } = Typography;
+
 
 function App() {
   const p = process.env.PUBLIC_URL;
+  const worker = InferenceWorker();
 
   return (
     <article className="App">
@@ -16,15 +19,10 @@ function App() {
           <Text type="secondary">Using Deep Learning with TensorFlow/Keras</Text>
         </h4>
       </header>
-      {/* <ModelShowcase modelFile={p+'/dcgan-mnist/model.json'} model={0}>
-
-        <GenerativeShowcase />
-      </ModelShowcase> */}
       <Paragraph>
         This web page allows you to do live inferences on our trained DCGAN model. The model was trained on a Van Gogh paintings <Link href='https://www.kaggle.com/ipythonx/van-gogh-paintings'>dataset</Link>. The training is still in an early phase, so don't expect real painting-like results. Nonetheless, this page exists to demonstrate the capability of loading our model in TensorFlow.js and doing live inferences. So, enjoy making some art in your browser ✨.
       </Paragraph>
-      <ModelShowcase modelFile={p+'/dcgan-gogh/model.json'} model={0}>
-
+      <ModelShowcase worker={worker} modelFile={p+'/dcgan-gogh/model.json'} >
         <GenerativeShowcase />
       </ModelShowcase>
       <Paragraph type='secondary'>

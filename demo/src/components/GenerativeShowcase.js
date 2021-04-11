@@ -1,29 +1,26 @@
 import { Button, Empty, Result } from 'antd';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as tf from '@tensorflow/tfjs';
 
 function GenerativeShowcase(props) {
   const canvasElement = useRef(null);
-  const [init, setInit] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [state, setState] = useState({
+    init: false,
+    generating: false
+  });
 
-  const gen = () => {
-    setInit(true);
-    setLoading(true);
-    const session = props.session;
-    const tensor = tf.truncatedNormal([1, 64])
-    
-    const outputData = session.predict(tensor);
-    // const rescaled = outputData.mul(0.5).add(0.5);
-    const rescaled = outputData;
-    const resized = tf.image.resizeBilinear(rescaled, [256, 256]);
-    const output = resized.gather(0);
-    tf.browser.toPixels(output, canvasElement.current);
-    setLoading(false);
-  };
+  useEffect(async () => {
+    if (!state.generating) return;
+
+    await props.worker.predict().then(output => {
+      const tensor = new tf.tensor3d(output);
+      tf.browser.toPixels(tensor, canvasElement.current);
+      setState({ init: true, generating: false });
+    });
+  }, [props.worker, state.init, state.generating]);
   
-  const canv = init ? 'inline' : 'none';
-  const empt = init ? 'none' : 'inline';
+  const canv = state.init ? 'inline' : 'none';
+  const empt = state.init ? 'none' : 'inline';
 
   return (
     <Result
@@ -37,7 +34,8 @@ function GenerativeShowcase(props) {
           }/>
       </div>}
       extra={
-        <Button onClick={gen} disabled={!props.session} loading={loading}>
+        <Button onClick={() => setState({ ...state, 'generating': true })}
+          disabled={!props.session} loading={state.generating}>
           Generate image
         </Button>
       }
