@@ -2,6 +2,7 @@
 Deep Learning (20/21) `WMAI017-05.2020-2021.2A`
 
 ![example generated images](report/img/morphing.png)
+<small>Note: these are **not** real people: these were generated using a [StyleGAN](https://github.com/NVlabs/stylegan). We retrained the network to generate paintings instead of faces.</small>
 
 Tries painting new Van Gogh's using [Generative Adversarial Networks](https://arxiv.org/abs/1406.2661). See our [report](<Making Art with Generative Adversarial Networks.pdf>). We also built a small [demo](https://dunnkers.com/generative-adversarial-networks) with TensorFlow.js, where you can generative images in your browser yourself ✨.
 
