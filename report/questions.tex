@@ -32,10 +32,10 @@
 \section{Implementation}
 
 \subsection{Which software did you make use of?}
-For StyleGAN, we used TensorFlow 1.10 with CUDA 9.0, running on Python 3.6. Of course we also used the code for StyleGAN itself (link is given in Question \ref{_sec:internet_code}).
+For StyleGAN, we used TensorFlow 1.10 with CUDA 9.0, running on Python 3.6. Of course we also used the code for StyleGAN itself (link is given in Question \ref{_sec:internet_code}). DCGAN was run on Tensorflow 2.4.0 with CUDA 11 on 3.6.12.
 
 \subsection{Which code did you use that you found on Internet (send links). What did you change to the code?}\label{_sec:internet_code}
-StyleGAN repository: \url{https://github.com/NVlabs/stylegan}. Changes were mainly made to \verb|train.py|, which configured the training schedule (progressive growing vs. constant size).
+StyleGAN repository: \url{https://github.com/NVlabs/stylegan}. Changes were mainly made to \verb|train.py|, which configured the training schedule (progressive growing vs. constant size). DCGAN was based on this web page: \url{https://www.tensorflow.org/tutorials/generative/dcgan}. While functional code was copied, the architecture was redesigned from scratch.
 
 \subsection{Where did you download the datasets from?}
 The Van Gogh dataset: \url{https://www.kaggle.com/ipythonx/van-gogh-paintings}.
@@ -44,7 +44,7 @@ The Van Gogh dataset: \url{https://www.kaggle.com/ipythonx/van-gogh-paintings}.
 Since training the StyleGAN instances was a very costly process, we did not include too many variations of the network in our experiment. We mainly changed whether the training schedule was reset before training or kept in the same state as it was for the original StyleGAN instance. This influenced the minibatch size, the learning rate and the resolution StyleGAN had to work with.
 
 \subsection{Which computers did you use (your own PC with GPU/CPU, Peregrine)?}
-We used a Peregrine node with two NVIDIA Tesla K40 GPUs for training the StyleGAN instances. The Fréchet Inception distances (FIDs) were calculated on one of our own laptops that had an RTX 2060 GPU. Some early experiments were ran in Kaggle's Notebook environment, running on NVidia K80 GPUs.
+We used a Peregrine node with two NVIDIA Tesla K40 GPUs for training the StyleGAN instances. The Fréchet Inception distances (FIDs) were calculated on one of our own laptops that had an RTX 2060 GPU. Some early experiments were ran in Kaggle's Notebook environment, running on NVidia K80 GPUs. DCGAN was ran on a personal computer with an NVIDIA GeForce RTX 2060S GPU.
 
 \subsection{How long did the experiments on average take for a single run?}
 Every training run (progressively grown or constant-sized network) took 24 hours. We believe more training would have been beneficial for the results, but after a bunch of testing runs we had to start wrapping things up. Calculating the FIDs took 4-5 hours for every trained network.
@@ -69,5 +69,7 @@ Every training run (progressively grown or constant-sized network) took 24 hours
     % \caption{Caption}
     \label{tab:my_label}
 \end{table}
+
+Besides the individual tasks, each team member actively engaged in most of the project's facets, even if they did not contribute directly to that part.
 
 \end{document}
