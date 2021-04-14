@@ -1,10 +1,12 @@
-# Painting Van Gogh's using Generative Adversarial Networks
+# Making Art with Generative Adversarial Networks
 Deep Learning (20/21) `WMAI017-05.2020-2021.2A`
 
-Tries painting new Van Gogh's using [Generative Adversarial Networks](https://arxiv.org/abs/1406.2661). Uses [this](https://www.kaggle.com/ipythonx/van-gogh-paintings) dataset. We also built a small [demo](https://dunnkers.com/generative-adversarial-networks) with TensorFlow.js, where you can generative images in your browser yourself ✨.
+![example generated images](report/img/morphing.png)
+
+Tries painting new Van Gogh's using [Generative Adversarial Networks](https://arxiv.org/abs/1406.2661). See our [report](<Making Art with Generative Adversarial Networks.pdf>). We also built a small [demo](https://dunnkers.com/generative-adversarial-networks) with TensorFlow.js, where you can generative images in your browser yourself ✨.
 
 ## Dataset
-To download the dataset on either your computer or on Peregrine:
+To download the [dataset](https://www.kaggle.com/ipythonx/van-gogh-paintings) on either your computer or on Peregrine:
 
 1. Follow the setup from the [official Kaggle API repo](https://github.com/Kaggle/kaggle-api#api-credentials). Make sure `~/.kaggle/kaggle.json` exists.
 
@@ -32,4 +34,4 @@ Training can be done with DCGAN or StyleGAN. See `dcgan` for instructions on tra
 _Note_: The `ppgn` directory contains code for the Plug and Play network and is there for archival purposes; it is something we eventually decided to discontinue.
 
 ## About
-By Loran Knol, Elisa Oostwal, Thijs Havinga and Jeroen Overschie.
+By Loran Knol, Elisa Oostwal, Thijs Havinga and [Jeroen Overschie](https://dunnkers.com).
