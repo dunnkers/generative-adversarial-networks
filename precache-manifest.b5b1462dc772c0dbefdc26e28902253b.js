@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/generative-adversarial-networks/a430f2537b121cbd03a6.worker.js.LICENSE.txt"
   },
   {
-    "revision": "bdb8eda8eea6b8eed4634cebbe8e4d20",
+    "revision": "976541ebac3c05430415da69f0941c74",
     "url": "/generative-adversarial-networks/index.html"
   },
   {
@@ -16,7 +16,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/generative-adversarial-networks/static/css/2.00a338ba.chunk.css"
   },
   {
-    "revision": "c21c6cb4c90fe1b9b33f",
+    "revision": "2dea2dd390acf5bd5047",
     "url": "/generative-adversarial-networks/static/css/main.4383de78.chunk.css"
   },
   {
@@ -28,8 +28,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/generative-adversarial-networks/static/js/2.b690797c.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "c21c6cb4c90fe1b9b33f",
-    "url": "/generative-adversarial-networks/static/js/main.1d06e246.chunk.js"
+    "revision": "2dea2dd390acf5bd5047",
+    "url": "/generative-adversarial-networks/static/js/main.e461c93f.chunk.js"
   },
   {
     "revision": "1695fbe7053b6336d368",
