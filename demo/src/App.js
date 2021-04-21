@@ -20,7 +20,7 @@ function App() {
         </h4>
       </header>
       <Paragraph>
-        This web page allows you to do live inferences on our trained DCGAN model. The model was trained on a Van Gogh paintings <Link href='https://www.kaggle.com/ipythonx/van-gogh-paintings'>dataset</Link>. The training is still in an early phase, so don't expect real painting-like results. Nonetheless, this page exists to demonstrate the capability of loading our model in TensorFlow.js and doing live inferences. So, enjoy making some art in your browser ✨.
+        Project exploring the possibility of generating new Van Gogh paintings using Generative Adversarial Networks. See <Link href='https://dunnkers.com/generative-adversarial-networks/Making%20Art%20with%20Generative%20Adversarial%20Networks.pdf'>report</Link> for details. This web page allows you to do live inferences on our trained DCGAN model. The model was trained on a Van Gogh paintings <Link href='https://www.kaggle.com/ipythonx/van-gogh-paintings'>dataset</Link>. The training is still in an early phase, so don't expect real painting-like results. Nonetheless, this page exists to demonstrate the capability of loading our model in TensorFlow.js and doing live inferences. So, enjoy making some art in your browser ✨.
       </Paragraph>
       <ModelShowcase worker={worker} modelFile={p+'/dcgan-gogh/model.json'} >
         <GenerativeShowcase />
